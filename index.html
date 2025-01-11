@@ -6,79 +6,123 @@
   <link rel="icon" href="favicon.ico"/>
   <title>RASTREO SATELITAL | KEEPY.MX</title>
   <meta name="description" content="RASTREO SATELITAL PARA GESTIÓN DE FLOTAS.">
-  <meta property="og:title" content="RASTREO SATELITAL | KEEPY.MX />
+  <meta property="og:title" content="RASTREO SATELITAL | KEEPY.MX" />
   <meta property="og:image" content="https://keepy.mx/cover.png" />
   <meta property="og:url" content="https://keepy.mx" />
   <meta property="og:type" content="website" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
   <style>
-  
-  html, body {
-    height: 100%; /* Full height for the html and body */
-    margin: 0; /* Remove default margin */
-    padding: 0; /* Remove default padding */
-    display: flex; /* Enable flexbox */
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
-    background: #161616; /* Background color */
-    background-size: cover; /* Background cover full area */
-    font-family: 'Roboto'; /* Font family for the whole page */
-    color: white; /* Text color for the whole page */
-    text-align: center; /* Align text to the center */
-  }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #161616;
+      font-family: 'Roboto', sans-serif;
+      color: white;
+      text-align: center;
+    }
 
-  h1 {
-    font-size: 1.5em; /* Heading size */
-	max-width: 95%; /* Maximum width of the h1 */
-	margin: auto; /* Centers the heading horizontally */
-  }
+    img {
+      max-width: 90%;
+      height: auto;
+    }
 
-  p {
-    font-size: 2em; /* Paragraph text size */
-  }
+    h1 {
+      font-size: 1.5rem;
+      margin: 20px auto;
+      padding: 0 10px;
+    }
 
-  a:link, a:visited, a:active {
-    color: #16A8D2; /* Link color */
-  }
+    p {
+      font-size: 1rem;
+    }
 
-  a:hover {
-    color: #161616; /* Link hover color */
-  }
+    a {
+      color: #16A8D2;
+      text-decoration: none;
+    }
 
-  footer {
-    position: fixed; /* Fixed at the bottom */
-    bottom: 0; /* Align to the bottom */
-    width: 100%; /* Full width */
-	margin-top: 20px 0; /* Automatically add margin */
-    padding: 20px 0; /* Padding around the text */
-  }
-</style>
+    a:hover {
+	  font-weight: bold;
+    }
 
-<script src="https://kit.fontawesome.com/747111511b.js" crossorigin="anonymous"></script>
+    .fa-stack {
+      font-size: 2rem;
+	  margin: 10px;
+    }
+
+    footer {
+      width: 100%;
+      padding: 20px 0;
+      text-align: center;
+      background: #161616;
+      position: relative;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.2rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+      }
+
+      .fa-stack {
+		font-size: 2rem;
+        margin: 5px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1rem;
+      }
+
+      p {
+        font-size: 0.8rem;
+      }
+
+      footer {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+  <script src="https://kit.fontawesome.com/747111511b.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <div>
-	<img src="keepy.png" style="max-width: 95%;"> 
-	<h1>RASTREO SATELITAL PARA GESTIÓN DE FLOTAS.</h1>
+    <img src="keepy.png" alt="Keepy Logo">
+    <h1>RASTREO SATELITAL PARA GESTIÓN DE FLOTAS.</h1>
     <p>
-      <a href="https://play.google.com/store/apps/details?id=mx.keepy.manager" target="_blank"><span class="fa-stack">
-        <i class="fa fa-circle fa-stack-2x fa-inverse glow"></i>
-        <i class="fa-brands fa-android fa-stack-1x"></i>
-      </span></a>
-      <a href="https://apps.apple.com/mx/app/keepy-manager/id6468938075" target="_blank"><span class="fa-stack">
-        <i class="fa fa-circle fa-stack-2x fa-inverse glow"></i>
-        <i class="fa-brands fa-apple fa-stack-1x"></i>
-      </span></a>
-      <a href="https://track.keepy.mx/login" target="_blank"><span class="fa-stack">
-        <i class="fa fa-circle fa-stack-2x fa-inverse glow"></i>
-        <i class="fas fa-sign-in-alt fa-stack-1x"></i>
-      </span></a>
-	<p>
+      <a href="https://play.google.com/store/apps/details?id=mx.keepy.manager" target="_blank">
+        <span class="fa-stack">
+          <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+          <i class="fa-brands fa-android fa-stack-1x"></i>
+        </span>
+      </a>
+      <a href="https://apps.apple.com/mx/app/keepy-manager/id6468938075" target="_blank">
+        <span class="fa-stack">
+          <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+          <i class="fa-brands fa-apple fa-stack-1x"></i>
+        </span>
+      </a>
+      <a href="https://track.keepy.mx/login" target="_blank">
+        <span class="fa-stack">
+          <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+          <i class="fas fa-sign-in-alt fa-stack-1x"></i>
+        </span>
+      </a>
+    </p>
   </div>
-	<footer>
-	<a href="https://keepy.mx/aviso-de-privacidad" style="color:white;">AVISO DE PRIVACIDAD</a>
-	<br>
+  <footer>
+    <a href="https://keepy.mx/aviso-de-privacidad">AVISO DE PRIVACIDAD</a><br>
     © 2024 KEEPY.MX
-	</footer>
+  </footer>
 </body>
 </html>
