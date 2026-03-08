@@ -1,79 +1,465 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
+  <head>
+	<title>KEEPY.MX</title>
+	<link rel="icon" href="favicon.ico"/>
+	<meta name="description" content="Inteligencia Artificial.">
+	<meta property="og:title" content="Inteligencia Artificial./>
+	<meta property="og:image" content="https://keepy.mx/cover.png" />
+	<meta property="og:url" content="https://keepy.mx" />
+	<meta property="og:type" content="website" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="color-scheme" content="dark">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<head>
-    <meta charset="UTF-8">
-    <title>RASTREO SATELITAL | KEEPY.MX</title>
-    <link rel="icon" href="favicon.ico" />
-    <meta name="description" content="RASTREO SATELITAL PARA GESTIÓN DE FLOTAS.">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="dark">
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #111111;
+    }
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://keepy.mx/" />
-    <meta property="og:title" content="RASTREO SATELITAL | KEEPY.MX" />
-    <meta property="og:description" content="RASTREO SATELITAL PARA GESTIÓN DE FLOTAS." />
-    <meta property="og:image" content="https://keepy.mx/assets/cover.png" />
-    <meta property="og:site_name" content="KEEPY.MX" />
-    <meta property="og:locale" content="es_MX" />
+    /* ── Centering ── */
+    .scene {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 800px;
+    }
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://keepy.mx/" />
-    <meta property="twitter:title" content="RASTREO SATELITAL | KEEPY.MX" />
-    <meta property="twitter:description" content="RASTREO SATELITAL PARA GESTIÓN DE FLOTAS." />
-    <meta property="twitter:image" content="https://keepy.mx/assets/cover.png" />
+    /* ── Ambient light ── */
+    .ambient-light {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(22, 168, 210, 0.12) 0%, transparent 60%);
+    }
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    /* ── Scanlines ── */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 2px,
+        rgba(22, 168, 210, 0.15) 2px,
+        rgba(22, 168, 210, 0.15) 4px
+      );
+    }
 
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    /* ── Parallax wrapper ── */
+    #parallax-layer {
+      z-index: 5;
+      will-change: transform;
+    }
 
-    <link rel="stylesheet" href="styles.css">
+    /* ── Orb container ── */
+    .orb-wrap {
+      position: relative;
+      width: 380px;
+      height: 380px;
+    }
+
+    @media (max-width: 480px) {
+      .orb-wrap {
+        width: 260px;
+        height: 260px;
+      }
+    }
+
+    /* ── Glow layers ── */
+    .orb-glow {
+      position: absolute;
+      inset: -80px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(22, 168, 210, 0.45) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .orb-glow-hard {
+      position: absolute;
+      inset: -30px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(22, 168, 210, 0.30) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    /* ── Ring orbits ── */
+    .orbit-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px dashed rgba(22, 168, 210, 0.25);
+      pointer-events: none;
+      top: 50%;
+      left: 50%;
+    }
+
+    .orbit-ring-1 {
+      width: 480px;
+      height: 480px;
+      margin-left: -240px;
+      margin-top: -240px;
+      animation: orbitSpin1 20s linear infinite;
+      border-style: dashed;
+      border-width: 1px;
+      border-color: rgba(22, 168, 210, 0.2);
+    }
+
+    .orbit-ring-2 {
+      width: 560px;
+      height: 560px;
+      margin-left: -280px;
+      margin-top: -280px;
+      animation: orbitSpin2 30s linear infinite reverse;
+      border-style: dotted;
+      border-width: 1px;
+      border-color: rgba(22, 168, 210, 0.15);
+    }
+
+    .orbit-ring-3 {
+      width: 640px;
+      height: 640px;
+      margin-left: -320px;
+      margin-top: -320px;
+      animation: orbitSpin3 25s linear infinite;
+      border-style: dashed;
+      border-width: 0.5px;
+      border-color: rgba(22, 168, 210, 0.1);
+    }
+
+    @keyframes orbitSpin1 {
+      from { transform: rotateX(65deg) rotateZ(0deg); }
+      to   { transform: rotateX(65deg) rotateZ(360deg); }
+    }
+    @keyframes orbitSpin2 {
+      from { transform: rotateX(70deg) rotateY(15deg) rotateZ(0deg); }
+      to   { transform: rotateX(70deg) rotateY(15deg) rotateZ(360deg); }
+    }
+    @keyframes orbitSpin3 {
+      from { transform: rotateX(55deg) rotateY(-10deg) rotateZ(0deg); }
+      to   { transform: rotateX(55deg) rotateY(-10deg) rotateZ(360deg); }
+    }
+
+    /* ── Hologram shimmer band ── */
+    .holo-shimmer {
+      position: absolute;
+      inset: -20px;
+      pointer-events: none;
+      overflow: hidden;
+      border-radius: 50%;
+    }
+
+    .holo-shimmer::before {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -10%;
+      width: 120%;
+      height: 80px;
+      background: linear-gradient(
+        180deg,
+        transparent,
+        rgba(22, 168, 210, 0.15),
+        rgba(22, 168, 210, 0.25),
+        rgba(22, 168, 210, 0.15),
+        transparent
+      );
+      animation: shimmerSweep 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmerSweep {
+      0%   { top: -15%; }
+      100% { top: 110%; }
+    }
+
+    /* ── Glitch overlay ── */
+    .glitch {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+      background: linear-gradient(
+        0deg,
+        transparent 40%,
+        rgba(22, 168, 210, 0.35) 41%,
+        rgba(22, 168, 210, 0.35) 43%,
+        transparent 44%,
+        transparent 58%,
+        rgba(22, 168, 210, 0.25) 59%,
+        rgba(22, 168, 210, 0.25) 60%,
+        transparent 61%
+      );
+    }
+
+    /* ── Electric arcs canvas ── */
+    #arcs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 6;
+    }
+
+    /* ── Particle canvas ── */
+    #particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+  </style>
 </head>
-
 <body>
-    <div class="app-container">
-        <header class="main-header">
-            <div class="logo-container">
-                <img src="assets/logo.png" alt="Keepy Logo" class="logo">
-            </div>
-            <a href="https://track.keepy.mx/" class="btn-login" target="_blank">LOGIN</a>
-        </header>
 
-        <main class="main-content">
-            <div class="hero-visual">
-                <img src="assets/hero.png" alt="Plataforma de Rastreo Keepy" class="hero-img">
-            </div>
+  <!-- 1: Ambient light -->
+  <div class="ambient-light" id="ambientLight"></div>
 
-            <div class="hero-text">
-                <h1>RASTREO SATELITAL PARA GESTIÓN DE FLOTAS</h1>
+  <div class="scanlines"></div>
+  <canvas id="particles"></canvas>
 
-                <div class="store-buttons">
-                    <a href="https://apps.apple.com/us/app/traccar-manager/id1113966562" class="btn-store"
-                        target="_blank">
-                        <i class="fa-brands fa-apple"></i>
-                        <span>App Store</span>
-                    </a>
-                    <a href="https://play.google.com/store/apps/details?id=mx.keepy.manager" class="btn-store"
-                        target="_blank">
-                        <i class="fa-brands fa-google-play"></i>
-                        <span>Play Store</span>
-                    </a>
-                </div>
-            </div>
-        </main>
+  <!-- 8: Electric arcs -->
+  <canvas id="arcs"></canvas>
 
-        <footer class="main-footer">
-            <span>© 2025 KEEPY.MX</span>
-        </footer>
+  <div class="scene">
+    <div id="parallax-layer">
+    <div class="orb-wrap" id="orb">
+      <div class="orb-glow"></div>
+      <div class="orb-glow-hard"></div>
+
+      <!-- 3: Ring orbits -->
+      <div class="orbit-ring orbit-ring-1"></div>
+      <div class="orbit-ring orbit-ring-2"></div>
+      <div class="orbit-ring orbit-ring-3"></div>
+
+      <div class="holo-shimmer"></div>
+      <div class="glitch" id="glitch"></div>
     </div>
+    </div>
+  </div>
+
+  <img src="assets/logo.png" alt="keepy.mx" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:200px;height:auto;z-index:9999;pointer-events:none;filter:drop-shadow(0 0 8px rgba(255,255,255,0.075)) drop-shadow(0 0 20px rgba(255,255,255,0.04));">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script>
+    // ── Breathing pulse ──
+    gsap.to('#orb', {
+      scale: 1.06,
+      duration: 1.5,
+      ease: 'sine.inOut',
+      yoyo: true,
+      repeat: -1,
+      transformOrigin: 'center center'
+    });
+
+    // ── Gentle floating ──
+    gsap.to('#orb', {
+      y: 18,
+      duration: 2,
+      ease: 'sine.inOut',
+      yoyo: true,
+      repeat: -1
+    });
+
+    // ── Soft glow pulse ──
+    gsap.to('.orb-glow', {
+      opacity: 0.85,
+      duration: 2,
+      ease: 'sine.inOut',
+      yoyo: true,
+      repeat: -1
+    });
+
+    gsap.to('.orb-glow-hard', {
+      opacity: 1,
+      duration: 3.5,
+      ease: 'sine.inOut',
+      yoyo: true,
+      repeat: -1
+    });
+
+    // ── Glitch flicker ──
+    function glitch() {
+      const el = document.getElementById('glitch');
+      const tl = gsap.timeline({
+        onComplete: () => {
+          gsap.delayedCall(2 + Math.random() * 3, glitch);
+        }
+      });
+      tl.to(el, { opacity: 1, duration: 0.05 })
+        .to(el, { opacity: 0, duration: 0.05 })
+        .to(el, { opacity: 0.7, duration: 0.04 })
+        .to(el, { opacity: 0, duration: 0.06 });
+    }
+    gsap.delayedCall(2, glitch);
+
+    // ── Particle drift ──
+    (function () {
+      const canvas = document.getElementById('particles');
+      const ctx = canvas.getContext('2d');
+      let W, H, cx, cy;
+
+      function resize() {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+        cx = W / 2;
+        cy = H / 2;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const COUNT = 90;
+      const particles = [];
+
+      for (let i = 0; i < COUNT; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 80 + Math.random() * 200;
+        particles.push({
+          x: cx + Math.cos(angle) * dist,
+          y: cy + Math.sin(angle) * dist,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25 - 0.12,
+          r: Math.random() * 2.5 + 0.6,
+          a: Math.random() * 0.5 + 0.15,
+          life: Math.random() * 250 + 120,
+          age: 0
+        });
+      }
+
+      function frame() {
+        ctx.clearRect(0, 0, W, H);
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.age++;
+
+          if (p.age > p.life) {
+            const angle = Math.random() * Math.PI * 2;
+            const dist = 80 + Math.random() * 200;
+            p.x = cx + Math.cos(angle) * dist;
+            p.y = cy + Math.sin(angle) * dist;
+            p.age = 0;
+            p.a = Math.random() * 0.5 + 0.15;
+          }
+
+          const fade = p.age < 25
+            ? p.age / 25
+            : p.age > p.life - 25
+              ? (p.life - p.age) / 25
+              : 1;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(22, 168, 210, ${p.a * fade})`;
+          ctx.fill();
+        }
+        requestAnimationFrame(frame);
+      }
+      frame();
+    })();
+
+    // ── 8: Electric arcs ──
+    (function () {
+      const canvas = document.getElementById('arcs');
+      const ctx = canvas.getContext('2d');
+      let W, H, cx, cy;
+
+      function resize() {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+        cx = W / 2;
+        cy = H / 2;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      function drawArc() {
+        const angle1 = Math.random() * Math.PI * 2;
+        const angle2 = angle1 + (Math.random() - 0.5) * 1.5;
+        const r = 160 + Math.random() * 60;
+
+        const x1 = cx + Math.cos(angle1) * r;
+        const y1 = cy + Math.sin(angle1) * r;
+        const x2 = cx + Math.cos(angle2) * r;
+        const y2 = cy + Math.sin(angle2) * r;
+
+        const segments = 8 + Math.floor(Math.random() * 8);
+        const points = [{ x: x1, y: y1 }];
+
+        for (let i = 1; i < segments; i++) {
+          const t = i / segments;
+          const bx = x1 + (x2 - x1) * t + (Math.random() - 0.5) * 40;
+          const by = y1 + (y2 - y1) * t + (Math.random() - 0.5) * 40;
+          points.push({ x: bx, y: by });
+        }
+        points.push({ x: x2, y: y2 });
+
+        // Main bright arc
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i++) {
+          ctx.lineTo(points[i].x, points[i].y);
+        }
+        ctx.strokeStyle = 'rgba(22, 168, 210, 0.7)';
+        ctx.lineWidth = 1.5;
+        ctx.shadowColor = 'rgba(22, 168, 210, 0.8)';
+        ctx.shadowBlur = 15;
+        ctx.stroke();
+
+        // Thinner white core
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i++) {
+          ctx.lineTo(points[i].x, points[i].y);
+        }
+        ctx.strokeStyle = 'rgba(180, 230, 255, 0.5)';
+        ctx.lineWidth = 0.5;
+        ctx.shadowBlur = 0;
+        ctx.stroke();
+      }
+
+      let arcTimer = 0;
+      let activeArcs = [];
+
+      function frame() {
+        ctx.clearRect(0, 0, W, H);
+
+        arcTimer++;
+        // Fire an arc every ~80-160 frames
+        if (arcTimer > 80 + Math.random() * 80) {
+          arcTimer = 0;
+          const arcCount = 1 + Math.floor(Math.random() * 3);
+          activeArcs = [];
+          for (let i = 0; i < arcCount; i++) {
+            activeArcs.push({ life: 6 + Math.floor(Math.random() * 6), age: 0 });
+          }
+        }
+
+        for (let i = activeArcs.length - 1; i >= 0; i--) {
+          const a = activeArcs[i];
+          if (a.age < a.life) {
+            drawArc();
+            a.age++;
+          } else {
+            activeArcs.splice(i, 1);
+          }
+        }
+
+        requestAnimationFrame(frame);
+      }
+      frame();
+    })();
+  </script>
 </body>
-
-
 </html>
-
